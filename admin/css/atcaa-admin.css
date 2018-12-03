@@ -1,0 +1,213 @@
+.atcaa-returned {
+    color: #FF0000;
+}
+
+
+.atcaa-overview-table .atcaa-already-in-cart {
+    color: #FF0000;
+}
+
+
+/* Error & success messages */
+.atcaa-message {
+    margin: 20px 0 0;
+    padding: 15px;
+    border-radius: 2px;
+}
+
+.atcaa-message a {
+    font-weight: 700;
+    text-decoration: none;
+    color: inherit;
+}
+
+.atcaa-message-success {
+    border-color: #d6e9c6;
+    color: #3c763d;
+    background-color: #dff0d8;
+}
+
+.atcaa-message-error {
+    border-color: #FFE0DE;
+    color: #FC0000;
+    background-color: #FFE0DE;
+}
+
+
+
+/* Loading overlay */
+.atcaa-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #fff;
+    opacity: 0.5;
+}
+
+.atcaa-loader-image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: #96588a;
+    border-radius: 50%;
+    -webkit-animation: spin 1s ease-in-out infinite;
+    animation: spin 1s ease-in-out infinite;
+    opacity: 1 !important;
+}
+
+.atcaa-loader-image .atcaa-loader-image-inner {
+    position: relative;
+    width: 30px;
+    height: 30px;
+}
+
+.atcaa-loader-image .atcaa-loader-image-inner:after {
+    position: absolute;
+    content: '';
+    background-color: #fff;
+    width: 14px;
+    height: 14px;
+    top: 2px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    border-radius: 50%;
+}
+
+
+
+/* ATCAA admin side meta box */
+.atcaa-meta-box-main-holder {
+    max-width: 800px;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.atcaa-meta-box-main-holder .atcaa-title-and-description {
+    margin-bottom: 5px;
+}
+
+
+.atcaa-meta-box-main-holder input[name=user_name]{
+    width: 100%;
+    margin: 10px 0;
+}
+
+.atcaa-meta-box-main-holder input[name=quantity],
+.atcaa-meta-box-main-holder select[name=variations] {
+    width: 49.5%;
+}
+
+.atcaa-meta-box-main-holder input[name=quantity] {
+    margin-right: 1%;
+}
+
+.postbox .atcaa-meta-box-main-holder button {
+    margin-left: 0;
+    margin-top: 10px;
+}
+
+.atcaa-meta-box-main-holder input,
+.atcaa-meta-box-main-holder select {
+    height: 30px;
+    float: left;
+    display: block;
+    margin: 5px 0;
+}
+
+
+
+/* WC Add To Cart As Admin Overview page */
+.atcaa-overview-holder {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.atcaa-overview-toggle-visibility {
+    padding-left: 40px;
+    min-width: 200px;
+}
+
+
+.atcaa-overview-table {
+    margin-top: 10px;
+}
+
+.atcaa-overview-table caption {
+    text-align: left;
+    padding: 8px 10px;
+}
+
+.atcaa-overview-table caption span {
+    position: relative;
+    padding-right: 30px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.atcaa-overview-table caption span:after {
+    display: inline-block;
+    font-family: "dashicons";
+    content: "\f347";
+    font-size: 20px;
+    line-height: 20px;
+    vertical-align: top;
+    position: absolute;
+    right: 5px;
+}
+
+.atcaa-overview-table.close caption span:after {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.atcaa-overview-table.close thead,
+.atcaa-overview-table.close tbody {
+   display: none;
+}
+
+
+.atcaa-overview-table #the-list > tr td:first-child {
+    white-space: nowrap
+}
+
+.atcaa-delete {
+    white-space: nowrap;
+    width: 100px;
+}
+
+.atcaa-table-row-number {
+    white-space: nowrap;
+    width: 10px;
+}
+
+.atcaa-clear-all {
+    float: right;
+}
+
+
+
+/* Responsiveness */
+@media only screen and (max-width: 782px) {
+
+    .atcaa-meta-box-main-holder input[name=quantity] {
+        height: 36px;
+    }
+
+
+    .atcaa-overview-holder {
+        display: block;
+        justify-content: initial;
+        align-items: initial;
+    }
+
+    .atcaa-overview-toggle-visibility {
+        padding-left: 0;
+        padding-top: 20px;
+    }
+}
