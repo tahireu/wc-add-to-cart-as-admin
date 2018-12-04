@@ -41,13 +41,13 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
             /* Add product to database table from which items are added to cart on user login */
             add_action('wp_ajax_prepare_product', array(__CLASS__, 'prepare_for_cart'));
 
-            /* WC Add To Cart As Admin Overview admin page */
+            /* ATCAA Overview admin page */
             add_action('admin_menu', array(__CLASS__, 'wc_atcaa_overview_page'));
 
-            /* AJAX delete single item in WC Add To Cart As Admin Overview page */
+            /* AJAX delete single item in ATCAA Overview page */
             add_action('wp_ajax_delete_item', array(__CLASS__, 'delete_single_item'));
 
-            /* AJAX clear all items for selected user in WC Add To Cart As Admin Overview page */
+            /* AJAX clear all items for selected user in ATCAA Overview page */
             add_action('wp_ajax_clear_user_items', array(__CLASS__, 'delete_all_items_for_user'));
 
         }
@@ -289,7 +289,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
                     $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Could not connect: ', ATCAA_TEXT_DOMAIN) . $wpdb->last_error . "</div>";
                     echo $error_string;
                 } else {
-                    echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart is updated. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
+                    echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart will be updated after he logs in. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
                 }
             } else {
                 echo $error_string;
@@ -301,7 +301,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
         /*
-         * Add WC Add To Cart As Admin Overview admin page
+         * Add ATCAA Overview admin page
          * */
         public static function wc_atcaa_overview_page() {
             add_submenu_page(
@@ -317,7 +317,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
         /*
-         * Render WC Add To Cart As Admin Overview page content
+         * Render ATCAA Overview page content
          * */
         public static function wc_atcaa_overview_page_callback() {
             global $wpdb;
@@ -426,7 +426,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
         /*
-         * Delete from WC Add To Cart As Admin Overview page
+         * Delete from ATCAA Overview page
          * */
         public static function delete_prepared_item($table_column, $post_value) {
 
@@ -441,7 +441,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
         /*
-        * Delete single item from WC Add To Cart As Admin Overview page
+        * Delete single item from ATCAA Overview page
         * */
         public static function delete_single_item() {
             self::delete_prepared_item('id', $_POST['item']);
@@ -450,7 +450,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
         /*
-        * Delete all items per user from WC Add To Cart As Admin Overview page
+        * Delete all items per user from ATCAA Overview page
         * */
         public static function delete_all_items_for_user() {
             self::delete_prepared_item('user_id', $_POST['user_id']);

@@ -75,7 +75,7 @@ jQuery(document).ready(function() {
     }
 
 
-    /* Load only on WC Add To Cart As Admin Overview page */
+    /* Load only on ATCAA Overview page */
     if (jQuery("body.woocommerce_page_wc-add-to-cart-as-admin-overview").length > 0) {
 
         /*
