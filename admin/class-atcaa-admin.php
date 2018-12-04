@@ -289,7 +289,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
                     $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Could not connect: ', ATCAA_TEXT_DOMAIN) . $wpdb->last_error . "</div>";
                     echo $error_string;
                 } else {
-                    echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart will be updated after he logs in. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
+                    echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart will be updated on login. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
                 }
             } else {
                 echo $error_string;
