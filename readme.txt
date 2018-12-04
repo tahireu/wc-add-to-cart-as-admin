@@ -30,6 +30,11 @@ If you are interested about some extended or custom functionality, please contac
 4. On each WooCommerce Product page you'll find WC Add To Cart As Admin meta box which will allow you to select user and add that item to it's cart
 5. On 'WooCommerce > WC Add To Cart As Admin Overview' page, you will be able to see the status of prepared items pre user and delete items added by mistake
 
+== Screenshots ==
+
+1. WC Add To Cart As Admin meta box on the bottom of each WooCommerce Product page in WP admin area
+2. WC Add To Cart As Admin Overview page
+
 == Known Issues ==
 
 * Plugin is not compatible with 'Enable stock management at product level' WooCommerce option
