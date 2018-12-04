@@ -42,4 +42,4 @@ If you are interested about some extended or custom functionality, please contac
 * Make it to work even if AJAX fail
 * Add 'dismiss' option to info messages
 
-If you want some of the functionality mentioned above to be implemented, or you have suggestions, please contact me at https://github.com/tahireu or tahiri.damir[at]gmail.com
+If you want some of the functionality mentioned above to be implemented, or you have your own suggestions, please contact me at https://github.com/tahireu or tahiri.damir[at]gmail.com
