@@ -17,7 +17,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
 
 
 
-        public static function on_load()
+        public static function atcaa_on_load()
         {
             add_action('plugins_loaded', array(__CLASS__, 'init'));
         }

@@ -66,11 +66,11 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
 
     if ( is_admin() ) {
         require plugin_dir_path(__FILE__) . 'admin/class-atcaa-admin.php';
-        ATCAA_admin::on_load();
+        ATCAA_admin::atcaa_on_load();
     }
 
     require plugin_dir_path(__FILE__) . 'public/class-atcaa-public.php';
-    ATCAA_public::on_load();
+    ATCAA_public::atcaa_on_load();
 
 
 } else {
