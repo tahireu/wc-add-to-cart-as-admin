@@ -428,7 +428,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * Delete from ATCAA Overview page
          * */
-        public static function delete_prepared_item($table_column, $post_value) {
+        public static function atcaa_delete_prepared($table_column, $post_value) {
 
             global $wpdb;
 
@@ -444,7 +444,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         * Delete single item from ATCAA Overview page
         * */
         public static function atcaa_delete_single_item() {
-            self::delete_prepared_item('id', $_POST['item']);
+            self::atcaa_delete_prepared('id', $_POST['item']);
         }
 
 
@@ -453,7 +453,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         * Delete all items per user from ATCAA Overview page
         * */
         public static function atcaa_delete_all_items_for_user() {
-            self::delete_prepared_item('user_id', $_POST['user_id']);
+            self::atcaa_delete_prepared('user_id', $_POST['user_id']);
         }
 
     }
