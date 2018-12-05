@@ -1,11 +1,11 @@
 === WC Add To Cart As Admin ===
 Contributors: tahireu
-Tags: woocommerce, webshop, shop, e-shop, web-shop, extension,
+Tags: woocommerce, webshop, shop, e-shop, web-shop, online-store, store
 Requires at least: 3.1.0
 Tested up to: 4.9.8
 Stable tag: 1.0.0
-License: GPL
-License URI: http://www.opensource.org/licenses/gpl-license.php
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 

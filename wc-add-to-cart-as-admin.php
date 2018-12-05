@@ -6,8 +6,8 @@
  * Version:         1.0.0
  * Author:          Tahireu
  * Author URI:      https://github.com/tahireu/
- * License:         GPL
- * License URI:     http://www.opensource.org/licenses/gpl-license.php
+ * License:         GPLv2 or later
+ * License URI:     http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 
