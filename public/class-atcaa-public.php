@@ -4,8 +4,6 @@
  */
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-session_start();
-
 
 /**
  * WC ATCAA Public class
