@@ -27,28 +27,28 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         public static function init()
         {
             /* Load scripts */
-            add_action('admin_enqueue_scripts', array(__CLASS__, 'load_scripts'));
+            add_action('admin_enqueue_scripts', array(__CLASS__, 'atcaa_load_scripts'));
 
             /* Display plugin meta box */
-            add_action('add_meta_boxes', array(__CLASS__, 'add_atcaa_meta_box'));
+            add_action('add_meta_boxes', array(__CLASS__, 'atcaa_add_meta_box'));
 
             /* Render actual form outside the main form (in footer), to prevent form nesting */
-            add_filter('admin_footer', array(__CLASS__, 'render_prepare_product_form'));
+            add_filter('admin_footer', array(__CLASS__, 'atcaa_render_prepare_product_form'));
 
             /* AJAX suggest users */
-            add_action('wp_ajax_get_listing_names', array(__CLASS__, 'suggest_users'));
+            add_action('wp_ajax_get_listing_names', array(__CLASS__, 'atcaa_suggest_users'));
 
             /* Add product to database table from which items are added to cart on user login */
-            add_action('wp_ajax_prepare_product', array(__CLASS__, 'prepare_for_cart'));
+            add_action('wp_ajax_prepare_product', array(__CLASS__, 'atcaa_prepare_for_cart'));
 
             /* ATCAA Overview admin page */
-            add_action('admin_menu', array(__CLASS__, 'wc_atcaa_overview_page'));
+            add_action('admin_menu', array(__CLASS__, 'atcaa_overview_page'));
 
             /* AJAX delete single item in ATCAA Overview page */
-            add_action('wp_ajax_delete_item', array(__CLASS__, 'delete_single_item'));
+            add_action('wp_ajax_delete_item', array(__CLASS__, 'atcaa_delete_single_item'));
 
             /* AJAX clear all items for selected user in ATCAA Overview page */
-            add_action('wp_ajax_clear_user_items', array(__CLASS__, 'delete_all_items_for_user'));
+            add_action('wp_ajax_clear_user_items', array(__CLASS__, 'atcaa_delete_all_items_for_user'));
 
         }
 
@@ -57,7 +57,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * Load class scripts
          */
-        public static function load_scripts()
+        public static function atcaa_load_scripts()
         {
             /* CSS */
             wp_enqueue_style('autocomplete-css', plugins_url('/vendor/jquery-autocomplete/css/jquery.auto-complete.css', __FILE__));
@@ -78,7 +78,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
          * Render forms in footer, outside of WP admin main form, to prevent form nesting
          * These forms fields are connected with their forms with "form" property - https://www.w3schools.com/tags/att_form.asp
          * */
-        public static function render_prepare_product_form()
+        public static function atcaa_render_prepare_product_form()
         {
             $current_screen = get_current_screen();
 
@@ -92,7 +92,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * Add ATCAA meta box
          * */
-        public static function add_atcaa_meta_box()
+        public static function atcaa_add_meta_box()
         {
             add_meta_box(
                 'atcaa_meta_box',
@@ -168,7 +168,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * AJAX Suggest users after admin start typing customer's name
          * */
-        public static function suggest_users()
+        public static function atcaa_suggest_users()
         {
             global $wpdb;
 
@@ -195,7 +195,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * AJAX Add items to database table so they are ready to be added to cart when user logs in
          * */
-        public static function prepare_for_cart()
+        public static function atcaa_prepare_for_cart()
         {
 
             global $wpdb;
@@ -303,14 +303,14 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * Add ATCAA Overview admin page
          * */
-        public static function wc_atcaa_overview_page() {
+        public static function atcaa_overview_page() {
             add_submenu_page(
                 'woocommerce',
                 __('WC Add To Cart As Admin Overview', ATCAA_TEXT_DOMAIN),
                 __('WC Add To Cart As Admin Overview', ATCAA_TEXT_DOMAIN),
                 'manage_options',
                 'wc-add-to-cart-as-admin-overview', // search whole plugin code for usage before eventual edit
-                array( __CLASS__, 'wc_atcaa_overview_page_callback' )
+                array( __CLASS__, 'atcaa_overview_page_callback' )
             );
         }
 
@@ -319,7 +319,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
          * Render ATCAA Overview page content
          * */
-        public static function wc_atcaa_overview_page_callback() {
+        public static function atcaa_overview_page_callback() {
             global $wpdb;
 
             echo "
@@ -443,7 +443,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
         * Delete single item from ATCAA Overview page
         * */
-        public static function delete_single_item() {
+        public static function atcaa_delete_single_item() {
             self::delete_prepared_item('id', $_POST['item']);
         }
 
@@ -452,7 +452,7 @@ if ( !class_exists( 'ATCAA_admin' ) ) {
         /*
         * Delete all items per user from ATCAA Overview page
         * */
-        public static function delete_all_items_for_user() {
+        public static function atcaa_delete_all_items_for_user() {
             self::delete_prepared_item('user_id', $_POST['user_id']);
         }
 

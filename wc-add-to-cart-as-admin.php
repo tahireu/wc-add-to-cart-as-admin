@@ -41,8 +41,8 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
      * Current plugin version - https://semver.org
      * This should be updated as new versions are released
      * */
-    if( !defined( 'WC_TRY_BEFORE_YOU_BUY_VERSION' ) ) {
-        define( 'WC_TRY_BEFORE_YOU_BUY_VERSION', '1.0.0' );
+    if( !defined( 'ATCAA_VERSION' ) ) {
+        define( 'ATCAA_VERSION', '1.0.0' );
     }
 
 
@@ -50,11 +50,11 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
     /*
      * Create database table on plugin activation
      * */
-    function create_table(){
-        ATCAA_activator::create_table();
+    function atcaa_create_table(){
+        ATCAA_activator::atcaa_create_table();
     }
 
-    register_activation_hook( __FILE__, 'create_table' );
+    register_activation_hook( __FILE__, 'atcaa_create_table' );
 
 
 
@@ -78,6 +78,6 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
     /*
      * Abort and display info message
      * */
-    ATCAA_activator::abort();
+    ATCAA_activator::atcaa_abort();
 
 }

@@ -30,10 +30,10 @@ if ( !class_exists( 'ATCAA_public' ) ) {
         {
 
             /* Add to cart on user login */
-            add_action('wp', array(__CLASS__, 'add_to_cart'));
+            add_action('wp', array(__CLASS__, 'atcaa_add_to_cart'));
 
             /* Delete from prepared items table on order submit */
-            add_action('save_post_shop_order', array(__CLASS__, 'delete_from_prepared_items_table'));
+            add_action('save_post_shop_order', array(__CLASS__, 'atcaa_delete_from_prepared_items_table'));
 
         }
 
@@ -41,7 +41,7 @@ if ( !class_exists( 'ATCAA_public' ) ) {
         /*
          * Add items to customer's cart on customer's login
          */
-        public static function add_to_cart()
+        public static function atcaa_add_to_cart()
         {
             if ( ! is_admin() ) {
 
@@ -72,7 +72,7 @@ if ( !class_exists( 'ATCAA_public' ) ) {
         /*
          * Delete from prepared items table on order submit
          * */
-        public static function delete_from_prepared_items_table() {
+        public static function atcaa_delete_from_prepared_items_table() {
 
             global $wpdb;
 
