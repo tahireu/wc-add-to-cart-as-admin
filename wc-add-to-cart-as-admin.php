@@ -14,8 +14,7 @@
 /*
  * Prevent intruders from sneaking around
  * */
-defined( 'ABSPATH' ) or die( 'No script kiddi
-es please!' );
+defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 
 /*
