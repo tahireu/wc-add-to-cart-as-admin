@@ -40,7 +40,7 @@ This WooCommerce/WordPress plugin will give you ability to add products to your 
 * Removed unnecessary comments
 * Fixed typos
 * Updated info messages in ATCAA meta box to be more accurate, understandable and self-explainable
-* Updated info messages behavior in ATCAA meta box to make more logical
+* Updated info messages behavior in ATCAA meta box to make more logic
 * Update and improve howto explanations on ATCAA Overview page and in ATCAA Meta Box
 * Updated readme.txt description, stable tag, tested up to, known issues and plans for the future.
 * Update screenshots relevant to these changes
