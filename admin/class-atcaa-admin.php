@@ -113,13 +113,13 @@ class ATCAA_admin
         <!-- Description -->
         <div class='atcaa-title-and-description'>
             <h1>" . __('Add this product to your customer\'s cart', ATCAA_TEXT_DOMAIN) . "</h1>
-            <span class='howto'>" . __('When selected user/customer logs in, products added here will appear in his shopping cart. 
+            <span class='howto'>" . __('When selected user logs in, products added here will appear in his shopping cart. 
             This way, you can prepare customer\'s cart content for him - fill it with items you think that suits him best. ', ATCAA_TEXT_DOMAIN) . "</span>
         </div>
 
         <!-- ATCAA form fields -->
         <div class='atcaa-form'>
-            <input  type='text' name='user_name' id='user_name' placeholder='" . __('Start typing user name', ATCAA_TEXT_DOMAIN) . "' form=" . self::FORM_ID . " />
+            <input  type='text' name='user_name' id='user_name' placeholder='" . __('Start typing username...', ATCAA_TEXT_DOMAIN) . "' form=" . self::FORM_ID . " />
             <input  type='number' name='quantity' id='quantity' placeholder='" . __('Quantity', ATCAA_TEXT_DOMAIN) . "' form=" . self::FORM_ID . " />
             <select type='text' name='variations' title='Variations' form=" . self::FORM_ID . "> " . self::render_dropdown_options() . "</select>" . "
             <input  type='hidden' name='product_id' value=" . wc_get_product()->get_id() . " form=" . self::FORM_ID . " />
@@ -172,7 +172,7 @@ class ATCAA_admin
 
         /* Get names */
         $name = $wpdb->esc_like(stripslashes($_POST['user_name'])) . '%'; // escape for use in LIKE statement
-        $query = "SELECT * FROM {$wpdb->prefix}users WHERE display_name LIKE %s ORDER BY user_login ASC"; //todo add dynamic prefix
+        $query = "SELECT * FROM {$wpdb->prefix}users WHERE display_name LIKE %s ORDER BY user_login ASC";
 
         $query = $wpdb->prepare($query, $name);
 
@@ -197,7 +197,7 @@ class ATCAA_admin
     {
 
         global $wpdb;
-        $error_string = $price = $product_level_stock = $stock_status = '';
+        $error_string = $price = $product_level_stock = $stock_status = $incompatible_product_type = '';
 
         /* Required fields validation */
         $empty_fields = array();
@@ -218,77 +218,86 @@ class ATCAA_admin
         $product_id = atcaa_prepare($_POST["product_id"]);
         $user_name = atcaa_prepare($_POST["user_name"]);
         $variation_id = atcaa_prepare($_POST["variations"]);
+        if ($variation_id !== '') {
+            $product_id = $variation_id;
+        }
 
 
         /* Get product info relevant for input validation */
         $product_level_stock = get_post_meta($product_id, '_manage_stock', true);
         $stock_status = get_post_meta($product_id, '_stock_status', true);
         $price = get_post_meta($product_id, '_price', true);
-        $variation_price = get_post_meta($variation_id, '_price', true);
-        $variation_stock_status = get_post_meta($variation_id, '_stock_status', true);
+        $_product = wc_get_product( $product_id );
+        if( $_product->is_type( 'grouped') || $_product->is_type( 'external') ) {
+            $incompatible_product_type = true;
+        }
 
 
         /* Start building $error_string */
-        if ($empty_fields !== "") {
-            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated. Field(s) ', ATCAA_TEXT_DOMAIN) . "<b>" . $empty_fields . "</b>" . __(' is/are required. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";
+        if ($_product->is_type( 'grouped')) {
+            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Sorry, this plugin is not compatible with ', ATCAA_TEXT_DOMAIN) . "<b>" . __('grouped ', ATCAA_TEXT_DOMAIN) . "</b>" . __('product type.', ATCAA_TEXT_DOMAIN) . "</div>";
         }
 
-        if ($too_long_fields !== "") {
-            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated. Field(s) ', ATCAA_TEXT_DOMAIN) . "<b>" . $too_long_fields . "</b>" . __(' is/are too long. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";;
+        if ($_product->is_type( 'external')) {
+            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('You cannot add ', ATCAA_TEXT_DOMAIN) . "<b>" . __('external ', ATCAA_TEXT_DOMAIN) . "</b>" . __('product to user\'s cart.', ATCAA_TEXT_DOMAIN) . "</div>";
         }
 
-        /* Don't even start checking anything related to price and stock of 'product level stock' option is turned on */
         if ($product_level_stock !== 'no') {
-            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated. WC Add To Cart As Admin plugin is not compatible with', ATCAA_TEXT_DOMAIN) . "<b>" . __(' stock management at product level', ATCAA_TEXT_DOMAIN) . "</b>" . __(' WooCommerce option.', ATCAA_TEXT_DOMAIN) . "</div>";
-        } else {
+            $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Sorry, this plugin is not compatible with', ATCAA_TEXT_DOMAIN) . "<b>" . __(' stock management at product level', ATCAA_TEXT_DOMAIN) . "</b>" . __(' WooCommerce option.', ATCAA_TEXT_DOMAIN) . "</div>";
+        }
 
-            /* Check price and stock status for simple products */
-            if ($variation_id == '') {
-                if ($price == '') {
-                    $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated.', ATCAA_TEXT_DOMAIN) . "<b>" . __(' Items without price', ATCAA_TEXT_DOMAIN) . "</b>" . __(' cannot be added to user cart.', ATCAA_TEXT_DOMAIN) . "</div>";
-                }
-                if($stock_status !== 'instock') {
-                    $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated. Item is currently', ATCAA_TEXT_DOMAIN) . "<b>" . __(' out of stock.', ATCAA_TEXT_DOMAIN) . "</b></div>";
-                }
 
-            /* Check price and stock status for variable products */
-            } else {
-                if ($variation_price == '') {
-                    $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated.', ATCAA_TEXT_DOMAIN) . "<b>" . __(' Items without price', ATCAA_TEXT_DOMAIN) . "</b>" . __(' cannot be added to user cart.', ATCAA_TEXT_DOMAIN) . "</div>";
-                }
-                if($variation_stock_status !== 'instock') {
-                    $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Cart could not be updated. Item is currently', ATCAA_TEXT_DOMAIN) . "<b>" . __(' out of stock.', ATCAA_TEXT_DOMAIN) . "</b></div>";
-                }
+        /* Don't even start checking anything if 'product level stock' option is turned on, or if product type is incompatible with this plugin */
+        if ($product_level_stock == 'no' && $incompatible_product_type !== true) {
+
+            if ($empty_fields !== "") {
+                $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Field(s) ', ATCAA_TEXT_DOMAIN) . "<b>" . $empty_fields . "</b>" . __(' is/are required. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";
             }
-        }
 
-        $query = "SELECT ID FROM {$wpdb->prefix}users WHERE display_name = '$user_name' LIMIT 1";
-        $user_id = $wpdb->get_results($query);
+            if ($too_long_fields !== "") {
+                $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Field(s) ', ATCAA_TEXT_DOMAIN) . "<b>" . $too_long_fields . "</b>" . __(' is/are too long. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";
+            }
+
+            if ($price == '') {
+                $error_string .= "<div class='atcaa-message atcaa-message-error'><b>" . __(' Items without price ', ATCAA_TEXT_DOMAIN) . "</b>" . __('cannot be added to user cart.', ATCAA_TEXT_DOMAIN) . "</div>";
+            }
+
+            if($stock_status !== 'instock') {
+                $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Item is currently', ATCAA_TEXT_DOMAIN) . "<b>" . __(' out of stock.', ATCAA_TEXT_DOMAIN) . "</b></div>";
+            }
+
+            $query = "SELECT ID FROM {$wpdb->prefix}users WHERE display_name = '$user_name' LIMIT 1";
+            $user_id = $wpdb->get_results($query);
 
 
-        if (count($user_id) == 0 && $user_name !== '') {
-            $error_string .=  "<div class='atcaa-message atcaa-message-error'>" . __('User ', ATCAA_TEXT_DOMAIN) . "<b>" . $user_name . "</b>" . __(' does not exists. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";
-        }
+            if (count($user_id) == 0 && $user_name !== '') {
+                $error_string .=  "<div class='atcaa-message atcaa-message-error'>" . __('User ', ATCAA_TEXT_DOMAIN) . "<b>" . $user_name . "</b>" . __(' does not exists. Please try again.', ATCAA_TEXT_DOMAIN) . "</div>";
+            }
 
 
-        /* Execute if $error_string is empty */
-        if ($error_string == '') {
-            $query = "INSERT INTO {$wpdb->prefix}atcaa_prepared_items (";
-            $query .= "user_id, quantity, product_id, variation_id";
-            $query .= ") values ('";
-            $query .= $user_id[0]->ID . "', '";
-            $query .= $quantity . "', '";
-            $query .= $product_id . "', '";
-            $query .= $variation_id . "')";
+            /* Execute if $error_string is empty */
+            if ($error_string == '') {
+                $query = "INSERT INTO {$wpdb->prefix}atcaa_prepared_items (";
+                $query .= "user_id, quantity, product_id, variation_id";
+                $query .= ") values ('";
+                $query .= $user_id[0]->ID . "', '";
+                $query .= $quantity . "', '";
+                $query .= $product_id . "', '";
+                $query .= $variation_id . "')";
 
-            $wpdb->get_results($query);
+                $wpdb->get_results($query);
 
-            if ($wpdb->last_error) {
-                $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Could not connect: ', ATCAA_TEXT_DOMAIN) . $wpdb->last_error . "</div>";
+                if ($wpdb->last_error) {
+                    $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Could not connect: ', ATCAA_TEXT_DOMAIN) . $wpdb->last_error . "</div>";
+                    echo $error_string;
+                } else {
+                    echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart will be updated on login. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
+                }
+
+            } else {
                 echo $error_string;
-            } else {
-                echo "<div class='atcaa-message atcaa-message-success'>" . $user_name . __(' cart will be updated on login. ', ATCAA_TEXT_DOMAIN) . "<a href='" . admin_url( 'admin.php?page=wc-add-to-cart-as-admin-overview') . "' target='_blank'>" . __('View all prepared items.', ATCAA_TEXT_DOMAIN) . "</a></div>";
             }
+
         } else {
             echo $error_string;
         }
@@ -326,7 +335,8 @@ class ATCAA_admin
             <h2>" . __('WC Add To Cart As Admin Overview', ATCAA_TEXT_DOMAIN) . "</h2>
             <div class='atcaa-overview-holder'>
                 <div class='atcaa-overview-info howto'>
-                    <span>" . __('These items will be added to user\'s cart when he logs in.', ATCAA_TEXT_DOMAIN) . "
+                    <span>" . __('These items will be added to user\'s cart when he logs in. Until then, you can remove items added by mistake.', ATCAA_TEXT_DOMAIN) . "
+                    <br />
                     " . __('After user place order, items for that user will be automatically removed from this page.', ATCAA_TEXT_DOMAIN) . "
                     </span>
                 </div>

@@ -2,15 +2,14 @@
 Contributors: tahireu
 Tags: woocommerce, webshop, shop, e-shop, web-shop, online-store, store
 Requires at least: 3.1.0
-Tested up to: 4.9.8
-Stable tag: 1.0.0
+Tested up to: 5.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
 This WooCommerce/WordPress plugin will give you ability to add products to your customer's cart from WP admin side.
-If you are interested about some extended or custom functionality, please contact me at https://github.com/tahireu or tahiri.damir[at]gmail.com
 
 == Installation ==
 
@@ -35,14 +34,34 @@ If you are interested about some extended or custom functionality, please contac
 1. WC Add To Cart As Admin meta box on the bottom of each WooCommerce Product page in WP admin area
 2. WC Add To Cart As Admin Overview page
 
+== Changelog ==
+
+= 1.0.1 =
+* Removed unnecessary comments
+* Fixed typos
+* Updated info messages in ATCAA meta box to be more accurate, understandable and self-explainable
+* Updated info messages behavior in ATCAA meta box to make more logical
+* Update and improve howto explanations on ATCAA Overview page and in ATCAA Meta Box
+* Updated readme.txt description, stable tag, tested up to, known issues and plans for the future.
+* Update screenshots relevant to these changes
+
+== Upgrade Notice ==
+
+= 1.0.1 =
+Main advantages of 1.0.1 are better error handling and improved info messages behavior and explanations when submitting data in ATCAA meta box.
+Also, this patch will improve howto explanations on both 'Product > ATCAA meta box' and 'ATCAA Overview' pages.
+
 == Known Issues ==
 
-* Plugin is not compatible with 'Enable stock management at product level' WooCommerce option
+* Plugin is not compatible with 'Stock management at product level' WooCommerce option
+* Plugin is not compatible with 'Grouped' product type
+* 'Delete' and 'Clear All' buttons on Overview page are not working in responsive/mobile mode in Firefox due to Firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1273997
 
 == Plans For The Future ==
 
-* Make it quantity/stock/inventory compatible
-* Create pagination and search on WC Add To Cart As Admin Overview page
+* Make it compatible with 'Stock management at product level' WooCommerce option
+* Make it compatible with 'Grouped' products
+* Add pagination and search field to WC Add To Cart As Admin Overview page
 * Add languages support
 * Make it to work even if AJAX fail
 * Add 'dismiss' option to info messages

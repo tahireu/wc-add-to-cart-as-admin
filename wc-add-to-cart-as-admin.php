@@ -3,7 +3,7 @@
  * Plugin Name:     WC Add To Cart As Admin
  * Plugin URI:      https://github.com/tahireu/wc_add_to_cart_as_admin
  * Description:     Add products to your customer's cart from WP admin side.
- * Version:         1.0.0
+ * Version:         1.0.1
  * Author:          Tahireu
  * Author URI:      https://github.com/tahireu/
  * License:         GPLv2 or later
@@ -14,7 +14,8 @@
 /*
  * Prevent intruders from sneaking around
  * */
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+defined( 'ABSPATH' ) or die( 'No script kiddi
+es please!' );
 
 
 /*
@@ -42,7 +43,7 @@ if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
      * This should be updated as new versions are released
      * */
     if( !defined( 'ATCAA_VERSION' ) ) {
-        define( 'ATCAA_VERSION', '1.0.0' );
+        define( 'ATCAA_VERSION', '1.0.1' );
     }
 
 
