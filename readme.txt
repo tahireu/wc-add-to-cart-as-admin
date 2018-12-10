@@ -7,6 +7,8 @@ Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+This WooCommerce/WordPress plugin will give you ability to add products to your customer's cart from WP admin side.
+
 == Description ==
 
 This WooCommerce/WordPress plugin will give you ability to add products to your customer's cart from WP admin side.
@@ -41,9 +43,9 @@ This WooCommerce/WordPress plugin will give you ability to add products to your 
 * Fixed typos
 * Updated info messages in ATCAA meta box to be more accurate, understandable and self-explainable
 * Updated info messages behavior in ATCAA meta box to make more logic
-* Update and improve howto explanations on ATCAA Overview page and in ATCAA Meta Box
+* Updated and improved howto explanations on ATCAA Overview page and in ATCAA Meta Box
 * Updated readme.txt description, stable tag, tested up to, known issues and plans for the future.
-* Update screenshots relevant to these changes
+* Updated screenshots relevant to these changes
 
 == Upgrade Notice ==
 
