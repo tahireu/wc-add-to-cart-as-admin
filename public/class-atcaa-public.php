@@ -50,14 +50,16 @@ class ATCAA_public
                 return;
             }
 
-            $query = "SELECT * FROM {$wpdb->prefix}atcaa_prepared_items WHERE user_id = '$current_user->id' AND imported_to_cart = '0'";
+            $query = "SELECT * FROM {$wpdb->prefix}atcaa_prepared_items WHERE user_id = %s AND imported_to_cart = %s";
+            $query = $wpdb->prepare($query, $current_user->id, 0);
             $results = $wpdb->get_results($query);
 
 
             if (isset($results)) {
                 foreach ($results as $result) {
-                    $woocommerce->cart->add_to_cart($result->product_id, $result->quantity, $result->variation_id);
-                    $query = "UPDATE {$wpdb->prefix}atcaa_prepared_items SET imported_to_cart = '1' WHERE product_id = '$result->product_id' AND user_id = '$current_user->id'";
+                    $woocommerce->cart->add_to_cart(intval($result->product_id), intval($result->quantity), intval($result->variation_id));
+                    $query = "UPDATE {$wpdb->prefix}atcaa_prepared_items SET imported_to_cart = %s WHERE product_id = %s AND user_id = %s";
+                    $query = $wpdb->prepare($query, 1, intval($result->product_id), $current_user->id);
                     $wpdb->get_results($query);
                 }
             }

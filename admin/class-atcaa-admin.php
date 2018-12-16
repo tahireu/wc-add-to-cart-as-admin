@@ -147,7 +147,7 @@ class ATCAA_admin
      * */
     public static function render_dropdown_options()
     {
-        $handle = new WC_Product_Variable($_GET['post']);
+        $handle = new WC_Product_Variable(intval($_GET['post']));
         $variations = $handle->get_children();
 
         $variations_placeholder = $variations ? __('Select variations', ATCAA_TEXT_DOMAIN) : __('Select variations (No variations available)', ATCAA_TEXT_DOMAIN);
@@ -155,7 +155,7 @@ class ATCAA_admin
 
         foreach ($variations as $value) {
             $single_variation = new WC_Product_Variation($value);
-            $output .= '<option value="' . $value . '">' . implode(" / ", $single_variation->get_variation_attributes()) . '-' . get_woocommerce_currency_symbol() . $single_variation->get_price() . '</option>';
+            $output .= '<option value="' . esc_attr($value) . '">' . esc_html(implode(" / ", $single_variation->get_variation_attributes()) . '-' . get_woocommerce_currency_symbol() . $single_variation->get_price()) . '</option>';
         }
 
         return $output;
@@ -171,7 +171,7 @@ class ATCAA_admin
         global $wpdb;
 
         /* Get names */
-        $name = $wpdb->esc_like(stripslashes($_POST['user_name'])) . '%'; // escape for use in LIKE statement
+        $name = $wpdb->esc_like(stripslashes(sanitize_text_field($_POST['user_name']))) . '%'; // escape for use in LIKE statement
         $query = "SELECT * FROM {$wpdb->prefix}users WHERE display_name LIKE %s ORDER BY user_login ASC";
 
         $query = $wpdb->prepare($query, $name);
@@ -180,7 +180,7 @@ class ATCAA_admin
 
         $users = array();
         foreach ($results as $result)
-            $users[] = addslashes($result->display_name);
+            $users[] = addslashes(esc_html($result->display_name));
 
         /* Encode into JSON format and output */
         echo json_encode($users);
@@ -214,10 +214,10 @@ class ATCAA_admin
 
 
         /* Store AJAX data into PHP variables */
-        $quantity = atcaa_prepare($_POST["quantity"]);
-        $product_id = atcaa_prepare($_POST["product_id"]);
-        $user_name = atcaa_prepare($_POST["user_name"]);
-        $variation_id = atcaa_prepare($_POST["variations"]);
+        $quantity = intval(atcaa_prepare($_POST["quantity"]));
+        $product_id = intval(atcaa_prepare($_POST["product_id"]));
+        $user_name = sanitize_text_field(atcaa_prepare($_POST["user_name"]));
+        $variation_id = sanitize_text_field(atcaa_prepare($_POST["variations"]));
         if ($variation_id !== '') {
             $product_id = $variation_id;
         }
@@ -266,7 +266,8 @@ class ATCAA_admin
                 $error_string .= "<div class='atcaa-message atcaa-message-error'>" . __('Item is currently', ATCAA_TEXT_DOMAIN) . "<b>" . __(' out of stock.', ATCAA_TEXT_DOMAIN) . "</b></div>";
             }
 
-            $query = "SELECT ID FROM {$wpdb->prefix}users WHERE display_name = '$user_name' LIMIT 1";
+            $query = "SELECT ID FROM {$wpdb->prefix}users WHERE display_name = %s LIMIT 1";
+            $query = $wpdb->prepare($query, $user_name);
             $user_id = $wpdb->get_results($query);
 
 
@@ -279,12 +280,9 @@ class ATCAA_admin
             if ($error_string == '') {
                 $query = "INSERT INTO {$wpdb->prefix}atcaa_prepared_items (";
                 $query .= "user_id, quantity, product_id, variation_id";
-                $query .= ") values ('";
-                $query .= $user_id[0]->ID . "', '";
-                $query .= $quantity . "', '";
-                $query .= $product_id . "', '";
-                $query .= $variation_id . "')";
+                $query .= ") VALUES (%s, %s, %s, %s)";
 
+                $query = $wpdb->prepare($query, $user_id[0]->ID, $quantity, $product_id, $variation_id );
                 $wpdb->get_results($query);
 
                 if ($wpdb->last_error) {
@@ -355,7 +353,7 @@ class ATCAA_admin
             if ($user_ids) {
             foreach ($user_ids as $user_id) {
 
-                $id = $user_id->user_id;
+                $id = intval($user_id->user_id);
                 $user = get_user_by('id', $id);
                 $row_number = 0;
 
@@ -366,9 +364,10 @@ class ATCAA_admin
                                   imported_to_cart,
                                   SUM(quantity) qntty 
                           FROM {$wpdb->prefix}atcaa_prepared_items 
-                          WHERE user_id = $id 
+                          WHERE user_id = %s 
                           GROUP BY id";
 
+                $query = $wpdb->prepare($query, $id);
                 $data_per_id = $wpdb->get_results($query);
 
 
@@ -376,7 +375,7 @@ class ATCAA_admin
                 <table id='atcaa-table-user-id-" . $id . "' class='atcaa-overview-table widefat fixed striped'>
                 
                     <caption>
-                        <span>" . $user->display_name . "</span>
+                        <span>" . esc_html($user->display_name) . "</span>
                         <button id='atcaa-clear-all' class='atcaa-clear-all' value = " . $id . ">" . __('Clear All', ATCAA_TEXT_DOMAIN) . "</button>
                     </caption>
                     
@@ -395,14 +394,14 @@ class ATCAA_admin
 
                             $row_number++;
 
-                            if ($data->variation_id !== '0') {
-                                $id = wc_get_product($data->variation_id);
+                            if (intval($data->variation_id) !== 0) {
+                                $id = wc_get_product(intval($data->variation_id));
                             } else {
-                                $id = wc_get_product($data->product_id);
+                                $id = wc_get_product(intval($data->product_id));
                             }
 
                             echo "
-                                <tr class='entry-id-" . $data->id . "'>
+                                <tr class='entry-id-" . intval($data->id) . "'>
                                     <td>" . $row_number . "</td>";
                             if ($data->imported_to_cart == 0) {
                             echo "
@@ -412,9 +411,9 @@ class ATCAA_admin
                                     <td class='atcaa-already-in-cart'>" . __('Already added to cart', ATCAA_TEXT_DOMAIN) . " </td>";
                             }
                             echo "
-                                    <td>" . $id->get_name() . "</td>
-                                    <td>" . $data->qntty . "</td>
-                                    <td>" . get_woocommerce_currency_symbol() . $id->get_price()*$data->qntty . "</td>
+                                    <td>" . esc_html($id->get_name()) . "</td>
+                                    <td>" . intval($data->qntty) . "</td>
+                                    <td>" . get_woocommerce_currency_symbol() . intval($id->get_price()*$data->qntty) . "</td>
                                 </tr>";
                         }
                 echo "</tbody>
@@ -440,7 +439,8 @@ class ATCAA_admin
 
         global $wpdb;
 
-        $query = "DELETE FROM {$wpdb->prefix}atcaa_prepared_items WHERE $table_column = $post_value";
+        $query = "DELETE FROM {$wpdb->prefix}atcaa_prepared_items WHERE $table_column = %s"; // todo: use placeholder for all $table_column variable also
+        $query = $wpdb->prepare($query, $post_value);
         $wpdb->get_results($query);
 
         wp_die();
@@ -452,7 +452,7 @@ class ATCAA_admin
     * Delete single item from ATCAA Overview page
     * */
     public static function atcaa_delete_single_item() {
-        self::atcaa_delete_prepared('id', $_POST['item']);
+        self::atcaa_delete_prepared('id', intval($_POST['item']));
     }
 
 
@@ -461,7 +461,7 @@ class ATCAA_admin
     * Delete all items per user from ATCAA Overview page
     * */
     public static function atcaa_delete_all_items_for_user() {
-        self::atcaa_delete_prepared('user_id', $_POST['user_id']);
+        self::atcaa_delete_prepared('user_id', intval($_POST['user_id']));
     }
 
 }
